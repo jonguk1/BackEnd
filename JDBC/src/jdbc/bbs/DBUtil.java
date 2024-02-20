@@ -1,4 +1,4 @@
-package jdbc.util;
+package jdbc.bbs;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
