@@ -4,20 +4,37 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 //화면계층 => GUI를 구성 (Presentation Layer)
-public class MyBoardApp extends JFrame{
-	private JTextField loginId;
-	private JPasswordField loginPwd;
-	private JTextField tfId;
-	private JTextField tfPw;
-	private JTextField tfName;
-	private JTextField tfTel;
-	private CardLayout card;
-	private JTextField tfNo;
-	private JTextField tfWriter;
-	private JTextField tfTitle;
+/*디자인 패턴
+ * -MVC 패턴
+ *  - M : Model -데이터를 가지는 부분 XXDAO, XXVO ==> Data layer
+ *  - V:  View  -화면(UI)을 구성하는 부분 MyBoardApp(Swing) ==> Presentation layer 	
+ *  - C:  Controller - Model과 View 사이에서 제어하는 부분 ==> Application layer
+ *                    사용자가 입력한 값을 모델로 넘긴다
+ *                    DB에서 가져온 결과를 화면쪽에 보여준다
+ *                    ...
+ *                    제어 흐름을 담당하는 부분
+ * 
+ * */
+
+
+public class MyBoardApp extends JFrame{//View
+	JTextField loginId;
+	JPasswordField loginPwd;
+	JTextField tfId;
+	JTextField tfPw;
+	JTextField tfName;
+    JTextField tfTel;
+	CardLayout card;
+	JTextField tfNo;
+	JTextField tfWriter;
+	JTextField tfTitle;
 	JButton btLogin, btJoin, btDel, btList, btClear;
 	JButton bbsWrite, bbsDel, bbsFind, bbsList;
 	JTextArea taMembers, taList, taContent;
+	JTabbedPane tabbedPane;
+	
+	MyEventHandler handler;//Controller
+
 	public MyBoardApp() {
 		super("::MyBoardApp::");
 		
@@ -25,7 +42,7 @@ public class MyBoardApp extends JFrame{
 		getContentPane().add(panel_1, "Center");
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel_1.add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel panel_2 = new JPanel();
@@ -231,6 +248,14 @@ public class MyBoardApp extends JFrame{
 		scrollPane_2.setViewportView(taList);
 		taList.setBorder(new TitledBorder("글 목 록"));
 		
+		//이벤트 핸들러 생성 => 외부클래스로 구성했다면 this 정보를 전달하자
+		handler = new MyEventHandler(this);
+		//이벤트 소스와 연결
+		btJoin.addActionListener(handler);
+		btList.addActionListener(handler);
+		btDel.addActionListener(handler);
+		btClear.addActionListener(handler);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400,700);
 		
@@ -241,4 +266,17 @@ public class MyBoardApp extends JFrame{
 		// TODO Auto-generated method stub
 		new MyBoardApp();
 	}
+
+	public void clear1() {
+		this.tfId.setText("");
+		this.tfName.setText("");
+		this.tfPw.setText("");
+		this.tfTel.setText("");
+		this.taMembers.setText("");
+		this.tfId.requestFocus();
+	}
+	
+	public void showMsg(String msg) {
+		JOptionPane.showMessageDialog(this, msg);
+	}//-------------------------
 }
