@@ -70,27 +70,33 @@ public class MyEventHandler implements ActionListener{
 	}
 
 	private void login() {
+		//id,pw값 받기
+		String loginId = gui.loginId.getText();
+		char[] pw = gui.loginPwd.getPassword();
+		String loginPwd = new String(pw);
+		
+		//유효성 체크
+		if(loginId ==null|| loginPwd == null || loginId.trim().isEmpty() || loginPwd.trim().isEmpty()) {
+			gui.showMsg("로그인 아이디와 비밀번호를 입력하세요");
+			gui.loginId.requestFocus();
+			return;
+		}
 		try {
-			String loginId = gui.loginId.getText();
-			char[] pw = gui.loginPwd.getPassword();
-			String loginPwd = new String(pw);
-			
-			int n = userDao.loginCheck(loginId, loginPwd);
-			
-			if(n ==-1) {
-				gui.showMsg("아이디가 틀렸습니다");
-				gui.loginId.requestFocus();
-				return;
-			}else if(n == -2) {
-				gui.showMsg("비밀번호가 틀렸습니다");
-				gui.loginId.requestFocus();
-				return;
-			}else{
-				gui.showMsg("로그인이 완료되었습니다");
-				gui.tabbedPane.setEnabledAt(0, false);
-	    		gui.tabbedPane.setEnabledAt(2, true);
-	    		gui.tabbedPane.setEnabledAt(3, true);
-	    		gui.tabbedPane.setSelectedIndex(3);
+			//userDao의 logionCheck(loginId,loginPwd) 호출
+			int result =userDao.loginCheck(loginId, loginPwd);
+			System.out.println("result: " + result);
+			if(result > 0) {
+				//결과값이 1이면 로그인 성공
+				gui.showMsg(loginId+ "님 환영합니다");
+				gui.tabbedPane.setEnabledAt(2,true);//게시판 탭 활성화
+				gui.tabbedPane.setEnabledAt(3,true);//게시판 탭 활성화
+				gui.setTitle(loginId + "님 로그인 중...");
+				gui.tfWriter.setText(loginId);//게시글 작성자를 로그인한 사람의 아이디로 설정
+				gui.tabbedPane.setSelectedIndex(3);
+			}else {
+				gui.showMsg("아이디 또는 비밀번호가 일치하지 않습니다");
+				gui.tabbedPane.setEnabledAt(2, false);
+				gui.tabbedPane.setEnabledAt(3, false);
 			}
 		}catch(SQLException e) {
 			gui.showMsg(e.getMessage());
