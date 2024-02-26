@@ -15,6 +15,7 @@ import java.awt.event.*;
  *                    제어 흐름을 담당하는 부분
  * 
  * */
+import java.util.ArrayList;
 
 
 public class MyBoardApp extends JFrame{//View
@@ -256,6 +257,17 @@ public class MyBoardApp extends JFrame{//View
 		btDel.addActionListener(handler);
 		btClear.addActionListener(handler);
 		
+		bbsWrite.addActionListener(handler);
+		bbsList.addActionListener(handler);
+		bbsDel.addActionListener(handler);
+		bbsFind.addActionListener(handler);
+		
+		btLogin.addActionListener(handler);
+		
+		//초기에 글쓰기,글목록 탭은 비활성화 ==>로그인 해야 활성화
+		tabbedPane.setEnabledAt(2, false);//글쓰기
+		tabbedPane.setEnabledAt(3, false);//글목록
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400,700);
 		
@@ -276,7 +288,33 @@ public class MyBoardApp extends JFrame{//View
 		this.tfId.requestFocus();
 	}
 	
+	public void clear2() {
+		this.tfNo.setText("");
+		this.tfTitle.setText("");
+		this.tfWriter.setText("");
+		this.taContent.setText("");
+		this.tfNo.requestFocus();
+	}
+	
 	public void showMsg(String msg) {
 		JOptionPane.showMessageDialog(this, msg);
 	}//-------------------------
+
+	public void showMembers(ArrayList<MemberVO> userList) {
+		if(userList == null) return;
+		if(userList.size() == 0) {
+			taMembers.setText("등록된 회원은 없습니다");
+			return;
+		}
+		taMembers.setText("");
+		taMembers.append("=============================================================\n");
+		taMembers.append("ID\tName\tTel\t\tIndate\n");
+		taMembers.append("=============================================================\n");
+		
+		for(MemberVO user:userList) {
+			taMembers.append(user.getId() + "\t" + user.getName() + "\t"  + user.getTel() + "\t\t"  
+							 +user.getIndate()+ "\n");
+		}
+		taMembers.append("=============================================================\n");
+	}
 }

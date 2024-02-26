@@ -13,7 +13,7 @@ public class BbsDAO {
 	public int insertBbs(BbsVO vo) throws SQLException{
 		try {
 			con = DBUtil.getCon();
-			String sql = "INSERT INTO BBS(no,tltie,writer,content,wdate)";
+			String sql = "INSERT INTO BBS(no,title,writer,content,wdate)";
 				   sql+= " VALUES(bbs_no_seq.nextval,?,?,?,sysdate)";
 			
 		    ps = con.prepareStatement(sql);

@@ -3,6 +3,7 @@ package jdbc.bbs;
 //UI<=== Application Layer ===> Data Layer ===>DB
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MyEventHandler implements ActionListener{
 
@@ -24,13 +25,119 @@ public class MyEventHandler implements ActionListener{
 		}else if(obj == gui.btClear) {//지우기
 			gui.clear1();
 		}else if(obj == gui.btList) {//회원목록
-			
+			listMember();
 		}else if(obj == gui.btDel) {//회원탈퇴
+			removeMember();
+		}else if(obj == gui.bbsWrite) {//게시판 글쓰기
+			writeList();
+		}else if(obj == gui.btLogin) {//로그인 처리
+			login();
+		}else if(obj == gui.bbsList) {//게시판 글목록
 			
+		}else if(obj == gui.bbsDel) {//게시글 삭제
+			//로그인한 사람이 자신만 쓴 글만 삭제
+		}else if(obj == gui.bbsFind) {
+			//title로 검색
 		}
 		
 	}
 	
+	private void writeList() {
+		String title = gui.tfTitle.getText();
+		String writer = gui.tfWriter.getText();
+		String content = gui.taContent.getText();
+		
+		if(title == null || title.trim().isEmpty()) {
+			gui.showMsg("타이틀을 입력하세요");
+			gui.tfTitle.requestFocus();
+			return;
+		}
+		BbsVO write = new BbsVO(0, title, writer, content, null);
+		
+		try {
+			int n = bbsDao.insertBbs(write);
+			
+	    	String msg = (n>0)? "글작성 완료- 글목록으로 이동합니다":"글작성 실패";
+	    	gui.showMsg(msg);
+	    	if(n>0) {
+	    		gui.tabbedPane.setSelectedIndex(3);
+	    		gui.clear2();
+	    	}	
+		}catch(SQLException e) {
+			gui.showMsg(e.getMessage());
+		}
+		
+	}
+
+	private void login() {
+		try {
+			String loginId = gui.loginId.getText();
+			char[] pw = gui.loginPwd.getPassword();
+			String loginPwd = new String(pw);
+			
+			int n = userDao.loginCheck(loginId, loginPwd);
+			
+			if(n ==-1) {
+				gui.showMsg("아이디가 틀렸습니다");
+				gui.loginId.requestFocus();
+				return;
+			}else if(n == -2) {
+				gui.showMsg("비밀번호가 틀렸습니다");
+				gui.loginId.requestFocus();
+				return;
+			}else{
+				gui.showMsg("로그인이 완료되었습니다");
+				gui.tabbedPane.setEnabledAt(0, false);
+	    		gui.tabbedPane.setEnabledAt(2, true);
+	    		gui.tabbedPane.setEnabledAt(3, true);
+	    		gui.tabbedPane.setSelectedIndex(3);
+			}
+		}catch(SQLException e) {
+			gui.showMsg(e.getMessage());
+		}
+		
+	}
+
+	private void listMember() {
+		try {
+			//userDao의 selectAll()호출
+			ArrayList<MemberVO> userList = userDao.selectAll();
+			//반환 받은 ArrayList에서 회원정보 꺼내서 taMembers에 출력
+			gui.showMembers(userList);
+		}catch(SQLException e) {
+			gui.showMsg(e.getMessage());
+		}
+	}
+
+	private void removeMember() {
+		//1. 입력한 id값 받기
+		String id = gui.tfId.getText();
+		//2. 유효성 체크
+		if(id == null || id.trim().isEmpty()) {
+			gui.showMsg("아이디를 입력해주세요");
+			gui.tfId.requestFocus();
+			return;
+		}
+		//3. userDao의 deleteMember(id) 호출
+	    try {
+	    	int n = userDao.deleteMember(id.trim());
+	    	
+	    	//4. 그 결과 메세지 처리	
+	    	String msg = (n>0)?"회원탈퇴가 완료되었습니다":"탈퇴 실패- 없는 아이디입니다" ;
+	    	gui.showMsg(msg);
+	    	
+	    	if(n>0) {
+	    		gui.tabbedPane.setEnabledAt(2, false);
+	    		gui.tabbedPane.setEnabledAt(3, false);
+	    		gui.clear1();
+	    		gui.tabbedPane.setSelectedIndex(0);//로그인 탭 선택
+	    	}
+	    }catch(SQLException e) {
+	    	gui.showMsg("아이디는 이미 사용중 입니다: "+ e.getMessage());
+	    }
+		
+	}
+
 	private void joinMember(){
 		//1.입력값 받기
 		String id = gui.tfId.getText();
