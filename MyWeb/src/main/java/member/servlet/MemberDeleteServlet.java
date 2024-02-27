@@ -16,6 +16,9 @@ import member.model.*;
 public class MemberDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+		doGet(req, res);
+	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		res.setContentType("text/html; charset=UTF-8");
@@ -28,18 +31,18 @@ public class MemberDeleteServlet extends HttpServlet {
 		
 		//2. 유효성 체크
 		if(id == null || id.trim().isEmpty()) {
-			out.println("<script>");
-			out.println("alert('아이디를 입력하세요')");
-			out.println("history.back();");
-			out.println("</script>");
+			res.sendRedirect("member/mypage.html");
+			//페이지 이동을 시킴 ==> 브라우저의 url을 member/mypage.html
+			//로 변경하여 서버에 새롭게 요청을 보내는 방식으로 페이지를
+			//이동한다
 			return;
 		}
 		//3.MemberDAO 객체 생성,delete(id)
 		MemberDAO userDao = new MemberDAO();
 		try {
 			int n =userDao.deleteMember(id);
-			String msg = (n>0) ? "회원 탈퇴 완료":"회원 탈퇴 실패";
-			String loc = (n>0) ? "index.html" : "mypage.html";
+			String msg = (n>0) ? "회원 탈퇴 완료":"회원 탈퇴 실패: 아이디를 확인하세요";
+			String loc = (n>0) ? "index.html" : "javascript:history.back()";
 			
 			//4. 그 결과 메세지 페이지 이동 처리
 			out.println("<script>");
@@ -49,9 +52,11 @@ public class MemberDeleteServlet extends HttpServlet {
 			out.println("</script>");
 			
 		}catch(SQLException e) {
-			out.println("<b>서버 에러입니다</b>");
+			out.println("<b>서버 에러:"+e.getMessage()+"</b><br>");
 			e.printStackTrace();
 		}
+		
+		out.close();
 		
 	}
 
