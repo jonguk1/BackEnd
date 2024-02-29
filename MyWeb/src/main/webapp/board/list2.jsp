@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.*,bbs.model.*" %>
 <jsp:include page="/inc/top.jsp" />
+<jsp:useBean id="dao" class="bbs.model.BbsDAO" scope="session" />
 
 		<!-- content -->
 		<div class= "container">
@@ -17,8 +18,8 @@
 				</tr>
 				<!-- ------------- -->
 				<%
-					BbsDAO bbs = new BbsDAO();
-					ArrayList<BbsVO> arr= bbs.listBbs();
+					//BbsDAO bbs = new BbsDAO();
+					ArrayList<BbsVO> arr= dao.listBbs();
 					if(arr == null || arr.size() ==0){
 				%>
 						<tr>

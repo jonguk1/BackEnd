@@ -65,7 +65,7 @@ public class MemberDAO {
 	{
 		ArrayList<MemberVO> arr = new ArrayList<>();
 		while(rs.next()) {
-			String id = rs.getString("id");
+			int id = rs.getInt("id");
 			String pw = rs.getString("pw");
 			String name = rs.getString("name");
 			String tel = rs.getString("tel");

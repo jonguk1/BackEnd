@@ -1,6 +1,11 @@
 package member.model;
 import java.sql.*;
 import java.util.*;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import common.db.DBUtil;
 //DAO (Data Access Object) : Database에 접근하여 CRUD로직을 수행하는 객체 
 //=> Data Layer(Persistence Layer) ==> Model에 해당
@@ -10,10 +15,22 @@ public class MemberDAO {
 	private PreparedStatement ps;
 	private ResultSet rs;
 	
+	private DataSource ds;
+	
+	public MemberDAO() {
+		try {
+			Context ctx = new InitialContext();
+			ds=(DataSource)ctx.lookup("java:comp/env/jdbc/myoracle");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/** 회원 가입 처리 - C(INSERT)*/
 	public int insertMember(MemberVO user) throws SQLException{
 		try {
-			con = DBUtil.getCon();
+			//con = DBUtil.getCon();
+			con = ds.getConnection();
 			String sql = "INSERT INTO java_member(id,name,pw,tel,indate)";
 			       sql+= " VALUES(?,?,?,?,SYSDATE)";
 			ps=con.prepareStatement(sql);
@@ -32,7 +49,8 @@ public class MemberDAO {
 	/**회원 탈퇴 처리 - D(DELETE) */
 	public int deleteMember(String id) throws SQLException{
 		try {
-			con = DBUtil.getCon();
+			//con = DBUtil.getCon();
+			con = ds.getConnection();
 			//delete문 작성
 			String sql = "DELETE FROM java_member WHERE id = ?";
 			//ps 얻기
@@ -50,7 +68,8 @@ public class MemberDAO {
 	/* 회원 목록 가져오기 -- R(SELECT) ==> 다중행을 반환하는 경우**/
 	public ArrayList<MemberVO> selectAll() throws SQLException{
 		try {
-			con = DBUtil.getCon();
+			//con = DBUtil.getCon();
+			con = ds.getConnection();
 			String sql = "SELECT * FROM java_member ORDER BY indate DESC";
 			ps=con.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -81,7 +100,8 @@ public class MemberDAO {
 	/** PK - id로 회원정보 가져오기 - R(SELECT) => 단일행을 반환하는 경우*/
 	public MemberVO findById(String id) throws SQLException{
 		try {
-			con = DBUtil.getCon();
+			//con = DBUtil.getCon();
+			con = ds.getConnection();
 			String sql = "SELECT * FROM java_member WHERE id = ?";
 			ps=con.prepareStatement(sql);
 			ps.setString(1, id);
@@ -113,7 +133,8 @@ public class MemberDAO {
 	/** 회원정보 수정 처리 - U (Update)*/
 	public int updateMember(MemberVO user) throws SQLException {
 		try {
-			con = DBUtil.getCon();
+			//con = DBUtil.getCon();
+			con = ds.getConnection();
 			String sql = "UPDATE java_member SET name=?, tel=?, pw=? WHERE id=?";
 			ps=con.prepareStatement(sql);
 			ps.setString(1, user.getName());

@@ -9,12 +9,12 @@ public class BbsDAO {
 	private PreparedStatement ps;
 	private ResultSet rs;
 	
-	//게시글 쓰기(시퀀스-BBS_NO_SEQ)
+	//게시글 쓰기(시퀀스-BBS_SEQ)
 	public int insertBbs(BbsVO vo) throws SQLException{
 		try {
 			con = DBUtil.getCon();
 			String sql = "INSERT INTO BBS(no,title,writer,content,wdate)";
-				   sql+= " VALUES(bbs_no_seq.nextval,?,?,?,sysdate)";
+				   sql+= " VALUES(bbs_seq.nextval,?,?,?,sysdate)";
 			
 		    ps = con.prepareStatement(sql);
 		    ps.setString(1, vo.getTitle());
