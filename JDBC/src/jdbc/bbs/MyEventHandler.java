@@ -23,7 +23,7 @@ public class MyEventHandler implements ActionListener{
 		if(obj == gui.btJoin) {//회원가입
 			joinMember();
 		}else if(obj == gui.btClear) {//지우기
-			gui.clear1();
+			gui.signUpclear();
 		}else if(obj == gui.btList) {//회원목록
 			listMember();
 		}else if(obj == gui.btDel) {//회원탈퇴
@@ -33,15 +33,80 @@ public class MyEventHandler implements ActionListener{
 		}else if(obj == gui.btLogin) {//로그인 처리
 			login();
 		}else if(obj == gui.bbsList) {//게시판 글목록
-			
+			showList();
 		}else if(obj == gui.bbsDel) {//게시글 삭제
-			//로그인한 사람이 자신만 쓴 글만 삭제
+			removeList();
 		}else if(obj == gui.bbsFind) {
-			//title로 검색
+			searchList();
 		}
 		
 	}
 	
+	private void removeList() {
+		String no = gui.tfNo.getText();
+		String writer = gui.tfWriter.getText();
+		//2. 유효성 체크
+		if(no == null || no.trim().isEmpty()) {
+			gui.showMsg("글번호를 입력해주세요");
+			gui.tfNo.requestFocus();
+			return;
+		}
+		//3. userDao의 deleteMember(id) 호출
+	    try {
+	    	int n = bbsDao.deleteList(no, writer);
+	    	
+	    	//4. 그 결과 메세지 처리	
+	    	String msg = (n>0)?"글 삭제가 완료되었습니다":"삭제 실패- 없는 글번호 입니다" ;
+	    	gui.showMsg(msg);
+	    	
+	    	if(n>0) {
+	    		gui.writeListclear();
+	    	}
+	    }catch(SQLException e) {
+	    	gui.showMsg("아이디는 이미 사용중 입니다: "+ e.getMessage());
+	    }
+		
+	}
+
+	private void showList() {
+		try {
+			//userDao의 selectAll()호출
+			ArrayList<BbsVO> bbsList = bbsDao.selectAll();
+			//반환 받은 ArrayList에서 회원정보 꺼내서 taMembers에 출력
+			gui.showList(bbsList);
+			gui.tabbedPane.setSelectedIndex(3);
+		}catch(SQLException e) {
+			gui.showMsg(e.getMessage());
+		}
+	}
+
+	private void searchList() {
+		String no = gui.tfSearchNo.getText();
+		String title = gui.tfSearchTitle.getText();
+		String writer = gui.tfSearchWriter.getText();
+		
+		if(no.trim().isBlank()&&title.trim().isBlank() && writer.trim().isBlank() ) {
+			gui.showMsg("검색어을 입력하세요");
+			return;
+		}
+		try {
+			ArrayList<BbsVO> arr = bbsDao.findList(no, title, writer);
+			if(arr.size() >0) {
+				gui.showList(arr);
+				gui.tabbedPane.setSelectedIndex(3);
+				gui.searchListclear();
+			}else {
+				gui.showMsg("검색결과 존재하지 않습니다");
+				gui.showList(arr);
+				gui.tabbedPane.setSelectedIndex(3);
+				return;
+			}
+		}catch(SQLException e) {
+			gui.showMsg(e.getMessage());
+		}
+		
+	}
+
 	private void writeList() {
 		String title = gui.tfTitle.getText();
 		String writer = gui.tfWriter.getText();
@@ -61,7 +126,7 @@ public class MyEventHandler implements ActionListener{
 	    	gui.showMsg(msg);
 	    	if(n>0) {
 	    		gui.tabbedPane.setSelectedIndex(3);
-	    		gui.clear2();
+	    		gui.writeListclear();
 	    	}	
 		}catch(SQLException e) {
 			gui.showMsg(e.getMessage());
@@ -90,13 +155,18 @@ public class MyEventHandler implements ActionListener{
 				gui.showMsg(loginId+ "님 환영합니다");
 				gui.tabbedPane.setEnabledAt(2,true);//게시판 탭 활성화
 				gui.tabbedPane.setEnabledAt(3,true);//게시판 탭 활성화
+				gui.tabbedPane.setEnabledAt(4,true);//게시판 탭 활성화
 				gui.setTitle(loginId + "님 로그인 중...");
 				gui.tfWriter.setText(loginId);//게시글 작성자를 로그인한 사람의 아이디로 설정
 				gui.tabbedPane.setSelectedIndex(3);
+				ArrayList<BbsVO> arr = bbsDao.selectAll();
+				gui.showList(arr);
+				
 			}else {
 				gui.showMsg("아이디 또는 비밀번호가 일치하지 않습니다");
 				gui.tabbedPane.setEnabledAt(2, false);
 				gui.tabbedPane.setEnabledAt(3, false);
+				gui.tabbedPane.setEnabledAt(4, false);
 			}
 		}catch(SQLException e) {
 			gui.showMsg(e.getMessage());
@@ -135,7 +205,7 @@ public class MyEventHandler implements ActionListener{
 	    	if(n>0) {
 	    		gui.tabbedPane.setEnabledAt(2, false);
 	    		gui.tabbedPane.setEnabledAt(3, false);
-	    		gui.clear1();
+	    		gui.signUpclear();
 	    		gui.tabbedPane.setSelectedIndex(0);//로그인 탭 선택
 	    	}
 	    }catch(SQLException e) {
@@ -147,7 +217,8 @@ public class MyEventHandler implements ActionListener{
 	private void joinMember(){
 		//1.입력값 받기
 		String id = gui.tfId.getText();
-		String pw = gui.tfPw.getText();
+		char[] pw = gui.tfPw.getPassword();
+		String password = new String(pw);
 		String name = gui.tfName.getText();
 		String tel = gui.tfTel.getText();
 		//2.유효성 체크 (id,pw,name)
@@ -155,7 +226,7 @@ public class MyEventHandler implements ActionListener{
 			gui.showMsg("아이디를 입력하세요");
 			gui.tfId.requestFocus();
 			return;
-		}else if(pw == null || pw.trim().isEmpty()) {
+		}else if(password == null || password.trim().isEmpty()) {
 			gui.showMsg("패스워드를 입력하세요");
 			gui.tfPw.requestFocus();
 			return;
@@ -165,7 +236,7 @@ public class MyEventHandler implements ActionListener{
 			return;
 		}
 		//3.입력값들을 MemberVO객체에 담아주기
-	    MemberVO user = new MemberVO(id,pw,name,tel,null);
+	    MemberVO user = new MemberVO(id,password,name,tel,null);
 		
 		//4.userDao의 insertMember()호출
 	    try {
@@ -177,7 +248,7 @@ public class MyEventHandler implements ActionListener{
 	    	if(n>0) {
 	    		gui.tabbedPane.setSelectedIndex(0);
 	    		//로그인 탭 선택
-	    		gui.clear1();
+	    		gui.signUpclear();
 	    	}
 	    	
 	    }catch(SQLException e) {

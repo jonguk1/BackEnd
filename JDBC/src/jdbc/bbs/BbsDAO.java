@@ -29,6 +29,71 @@ public class BbsDAO {
 		}
 	}
 	
+	//게시글 목록 가져오기
+	public ArrayList<BbsVO> selectAll() throws SQLException {
+		try {
+			con = DBUtil.getCon();
+			String sql = "SELECT no,title,writer,content,wdate FROM bbs ORDER BY no DESC";
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			return makeList(rs);
+		}finally {
+			close();
+		}
+	}
+	
+	//게시글 검색 하기
+	public ArrayList<BbsVO> findList(String no,String title,String writer) throws SQLException {
+		try {
+			con = DBUtil.getCon();
+			String sql = "SELECT no,title,writer,content,wdate FROM bbs";
+				   sql +=" WHERE no LIKE '%'||?||'%' and title LIKE '%'||?||'%' and writer LIKE '%'||?||'%' ";
+				   sql +=" ORDER BY no DESC";
+		    ps=con.prepareStatement(sql);
+		    ps.setString(1, no);
+		    ps.setString(2, title);
+		    ps.setString(3, writer);
+		    rs=ps.executeQuery();
+		    
+			return makeList(rs);
+		    
+		}finally {
+			close();
+		}
+	}
+	
+	
+	public ArrayList<BbsVO> makeList(ResultSet rs) throws SQLException{
+		ArrayList<BbsVO> arr = new ArrayList<>();
+		while(rs.next()) {
+			int no = rs.getInt("no");
+			String title = rs.getString("title");
+			String writer = rs.getString("writer");
+			String content = rs.getString("content");
+			java.sql.Date wdate = rs.getDate("wdate");
+			
+			BbsVO record = new BbsVO(no, title, writer, content, wdate);
+			arr.add(record);
+		}
+		return arr;
+		
+	}
+	
+	public int deleteList(String no, String writer) throws SQLException {
+		try {
+			con = DBUtil.getCon();
+			String sql = "DELETE FROM bbs WHERE no = ? and writer = ?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, no);
+			ps.setString(2, writer);
+			int n = ps.executeUpdate();
+			return n;
+		}finally {
+			close();
+		}
+	}
+	
 	
 	public void close() {
 		try {

@@ -22,20 +22,21 @@ public class MyBoardApp extends JFrame{//View
 	JTextField loginId;
 	JPasswordField loginPwd;
 	JTextField tfId;
-	JTextField tfPw;
 	JTextField tfName;
+	JPasswordField tfPw;
     JTextField tfTel;
 	CardLayout card;
 	JTextField tfNo;
 	JTextField tfWriter;
 	JTextField tfTitle;
 	JButton btLogin, btJoin, btDel, btList, btClear;
-	JButton bbsWrite, bbsDel, bbsFind, bbsList;
+	JButton bbsWrite, bbsDel,bbsFind,bbsList;
 	JTextArea taMembers, taList, taContent;
 	JTabbedPane tabbedPane;
+	JTextField tfSearchNo,tfSearchTitle,tfSearchWriter;
 	
 	MyEventHandler handler;//Controller
-
+	
 	public MyBoardApp() {
 		super("::MyBoardApp::");
 		
@@ -53,17 +54,17 @@ public class MyBoardApp extends JFrame{//View
 		
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(MyBoardApp.class.getResource("/jdbc/bbs/logo2.png")));
-		lblNewLabel_1.setBounds(49, 77, 280, 114);
+		lblNewLabel_1.setBounds(65, 79, 280, 114);
 		panel_2.add(lblNewLabel_1);
 		
 		loginId = new JTextField();
-		loginId.setBounds(49, 201, 280, 59);
+		loginId.setBounds(65, 203, 280, 59);
 		panel_2.add(loginId);
 		loginId.setColumns(10);
 		loginId.setBorder(new TitledBorder("::ID::"));
 		
 		loginPwd = new JPasswordField();
-		loginPwd.setBounds(49, 270, 280, 57);
+		loginPwd.setBounds(65, 272, 280, 57);
 		panel_2.add(loginPwd);
 		loginPwd.setBorder(new TitledBorder("::PASSWORD::"));
 		
@@ -71,7 +72,7 @@ public class MyBoardApp extends JFrame{//View
 		btLogin.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btLogin.setForeground(new Color(245, 255, 250));
 		btLogin.setBackground(new Color(0, 139, 139));
-		btLogin.setBounds(49, 342, 280, 45);
+		btLogin.setBounds(65, 344, 280, 45);
 		panel_2.add(btLogin);
 		
 		JPanel panel_3 = new JPanel();
@@ -89,11 +90,6 @@ public class MyBoardApp extends JFrame{//View
 		tfId.setBounds(85, 92, 260, 46);
 		panel_3.add(tfId);
 		tfId.setColumns(10);
-		
-		tfPw = new JTextField();
-		tfPw.setColumns(10);
-		tfPw.setBounds(85, 149, 260, 46);
-		panel_3.add(tfPw);
 		
 		
 		tfName = new JTextField();
@@ -159,13 +155,17 @@ public class MyBoardApp extends JFrame{//View
 		scrollPane.setViewportView(taMembers);
 		taMembers.setBorder(new TitledBorder(":::회원목록:::"));
 		
+		tfPw = new JPasswordField();
+		tfPw.setBounds(85, 148, 260, 47);
+		panel_3.add(tfPw);
+		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("게시판 글쓰기", null, panel, null);
 		panel.setLayout(null);
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setLayout(null);
-		panel_4.setBounds(12, 20, 344, 477);
+		panel_4.setBounds(23, 21, 344, 477);
 		panel.add(panel_4);
 		
 		tfNo = new JTextField();
@@ -185,6 +185,7 @@ public class MyBoardApp extends JFrame{//View
 		tfWriter.setBounds(12, 182, 312, 46);
 		panel_4.add(tfWriter);
 		tfWriter.setBorder(new TitledBorder("작성자(Writer)"));
+		tfWriter.setEnabled(false);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(12, 238, 312, 218);
@@ -194,14 +195,14 @@ public class MyBoardApp extends JFrame{//View
 		scrollPane_1.setViewportView(taContent);
 		taContent.setBorder(new TitledBorder("글내용(Content)"));
 		//-게시판 목록--------------------------------------
-		JLabel lblNewLabel = new JLabel("::나의 게시판::");
+		JLabel lblNewLabel = new JLabel("::나의 게시판 글쓰기::");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		lblNewLabel.setBounds(57, 10, 221, 46);
 		panel_4.add(lblNewLabel);
 		
 		JPanel panel_6_1 = new JPanel();
-		panel_6_1.setBounds(12, 528, 355, 46);
+		panel_6_1.setBounds(22, 528, 355, 46);
 		panel.add(panel_6_1);
 		panel_6_1.setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -218,27 +219,14 @@ public class MyBoardApp extends JFrame{//View
 		bbsDel.setBackground(Color.BLUE);
 		panel_6_1.add(bbsDel);
 		
-		bbsFind = new JButton("글검색");
-		bbsFind.setActionCommand("글검색");
-		bbsFind.setForeground(new Color(240, 248, 255));
-		bbsFind.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		bbsFind.setBackground(Color.MAGENTA);
-		panel_6_1.add(bbsFind);
-		
-		bbsList = new JButton("글목록");
-		bbsList.setActionCommand("글목록");
-		bbsList.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		bbsList.setBackground(new Color(135, 206, 235));
-		panel_6_1.add(bbsList);
-		
 		JPanel panel_5 = new JPanel();
 		tabbedPane.addTab("게시판 목록", null, panel_5, null);
 		panel_5.setLayout(null);
 		
-		JLabel lblNewLabel_4 = new JLabel("::나의 게시판  글목록::");
+		JLabel lblNewLabel_4 = new JLabel("::전체 게시판  글목록::");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_4.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-		lblNewLabel_4.setBounds(40, 22, 287, 46);
+		lblNewLabel_4.setBounds(57, 21, 287, 46);
 		panel_5.add(lblNewLabel_4);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -249,6 +237,61 @@ public class MyBoardApp extends JFrame{//View
 		scrollPane_2.setViewportView(taList);
 		taList.setBorder(new TitledBorder("글 목 록"));
 		
+		JPanel panel_7 = new JPanel();
+		tabbedPane.addTab("게시판 검색", null, panel_7, null);
+		panel_7.setLayout(null);
+		
+		JPanel panel_6_2 = new JPanel();
+		panel_6_2.setBounds(12, 537, 377, 46);
+		panel_7.add(panel_6_2);
+		panel_6_2.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		bbsFind = new JButton("글검색");
+		bbsFind.setForeground(new Color(240, 248, 255));
+		bbsFind.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bbsFind.setBackground(Color.MAGENTA);
+		bbsFind.setActionCommand("글검색");
+		panel_6_2.add(bbsFind);
+		
+		bbsList = new JButton("글목록");
+		bbsList.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bbsList.setBackground(new Color(135, 206, 235));
+		panel_6_2.add(bbsList);
+		
+		JPanel panel_8 = new JPanel();
+		panel_8.setLayout(null);
+		panel_8.setBounds(12, 28, 377, 477);
+		panel_7.add(panel_8);
+		
+		tfSearchNo = new JTextField();
+		tfSearchNo.setColumns(10);
+		tfSearchNo.setBorder(new TitledBorder("글번호(NO)"));
+		tfSearchNo.setBounds(12, 66, 353, 45);
+		panel_8.add(tfSearchNo);
+		
+		tfSearchTitle = new JTextField();
+		tfSearchTitle.setColumns(10);
+		tfSearchTitle.setBorder(new TitledBorder("글제목(Title)"));
+		tfSearchTitle.setBounds(12, 121, 353, 53);
+		panel_8.add(tfSearchTitle);
+		
+		tfSearchWriter = new JTextField();
+		tfSearchWriter.setColumns(10);
+		tfSearchWriter.setBorder(new TitledBorder("작성자(Writer)"));
+		tfSearchWriter.setBounds(12, 182, 353, 46);
+		panel_8.add(tfSearchWriter);
+		
+		JLabel lblNewLabel_5 = new JLabel("::나의 게시판 검색::");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		lblNewLabel_5.setBounds(77, 10, 221, 46);
+		panel_8.add(lblNewLabel_5);
+		
+		//초기에 글쓰기,글목록 탭은 비활성화 ==>로그인 해야 활성화
+		tabbedPane.setEnabledAt(2, false);//글쓰기
+		tabbedPane.setEnabledAt(3, false);
+		tabbedPane.setEnabledAt(4, false);
+		
 		//이벤트 핸들러 생성 => 외부클래스로 구성했다면 this 정보를 전달하자
 		handler = new MyEventHandler(this);
 		//이벤트 소스와 연결
@@ -258,18 +301,15 @@ public class MyBoardApp extends JFrame{//View
 		btClear.addActionListener(handler);
 		
 		bbsWrite.addActionListener(handler);
-		bbsList.addActionListener(handler);
 		bbsDel.addActionListener(handler);
-		bbsFind.addActionListener(handler);
 		
 		btLogin.addActionListener(handler);
 		
-		//초기에 글쓰기,글목록 탭은 비활성화 ==>로그인 해야 활성화
-		tabbedPane.setEnabledAt(2, false);//글쓰기
-		tabbedPane.setEnabledAt(3, false);//글목록
-		
+		bbsFind.addActionListener(handler);
+		bbsList.addActionListener(handler);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(400,700);
+		setSize(420,700);
 		
 		setVisible(true);
 	}
@@ -277,9 +317,9 @@ public class MyBoardApp extends JFrame{//View
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new MyBoardApp();
-	}
-
-	public void clear1() {
+	}	
+	
+	public void signUpclear() {
 		this.tfId.setText("");
 		this.tfName.setText("");
 		this.tfPw.setText("");
@@ -288,12 +328,17 @@ public class MyBoardApp extends JFrame{//View
 		this.tfId.requestFocus();
 	}
 	
-	public void clear2() {
+	public void writeListclear() {
 		this.tfNo.setText("");
 		this.tfTitle.setText("");
-		this.tfWriter.setText("");
 		this.taContent.setText("");
 		this.tfNo.requestFocus();
+	}
+	
+	public void searchListclear() {
+		this.tfSearchNo.setText("");
+		this.tfSearchTitle.setText("");
+		this.tfSearchWriter.setText("");
 	}
 	
 	public void showMsg(String msg) {
@@ -316,5 +361,24 @@ public class MyBoardApp extends JFrame{//View
 							 +user.getIndate()+ "\n");
 		}
 		taMembers.append("=============================================================\n");
+	}
+	
+	
+	public void showList(ArrayList<BbsVO> bbsList) {
+		if(bbsList == null) return;
+		if(bbsList.size() == 0) {
+			taList.setText("등록된 게시글은 없습니다");
+			return;
+		}
+		taList.setText("");
+		taList.append("===========================================\n");
+		taList.append("글번호\t글제목\t글쓴이\t글내용\t작성일\n");
+		for(BbsVO bbs:bbsList) {
+			taList.append(bbs.getNo() + "\t" + bbs.getTitle() + "\t" + bbs.getWriter() + "\t" + bbs.getContent()
+			+ "\t" + bbs.getWdate() + "\n");
+		}
+		taList.append("============================================\n");
+		
+		
 	}
 }

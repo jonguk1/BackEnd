@@ -65,13 +65,13 @@ public class MemberDAO {
 	{
 		ArrayList<MemberVO> arr = new ArrayList<>();
 		while(rs.next()) {
-			int id = rs.getInt("id");
+			String id = rs.getString("id");
 			String pw = rs.getString("pw");
 			String name = rs.getString("name");
 			String tel = rs.getString("tel");
 			java.sql.Date indate = rs.getDate("indate");
 			
-			MemberVO record = new MemberVO(id,pw,name,tel,indate);
+			MemberVO record = new MemberVO(id, pw, name, tel, indate);
 			arr.add(record);
 		}//while-----
 		return arr;
