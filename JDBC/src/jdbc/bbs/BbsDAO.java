@@ -79,13 +79,13 @@ public class BbsDAO {
 		return arr;
 		
 	}
-	
-	public int deleteList(String no, String writer) throws SQLException {
+	//게시글 삭제
+	public int deleteList(String title, String writer) throws SQLException {
 		try {
 			con = DBUtil.getCon();
-			String sql = "DELETE FROM bbs WHERE no = ? and writer = ?";
+			String sql = "DELETE FROM bbs WHERE title = ? and writer = ?";
 			ps = con.prepareStatement(sql);
-			ps.setString(1, no);
+			ps.setString(1, title);
 			ps.setString(2, writer);
 			int n = ps.executeUpdate();
 			return n;

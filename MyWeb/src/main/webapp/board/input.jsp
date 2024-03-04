@@ -4,7 +4,9 @@
 		<!-- bbs관련 js파일 참조 ----------------->
 		<script src="../js/bbs.js"></script>
 		<!-- ------------------------------ -->
-
+		<%
+			String loginId = (String)session.getAttribute("loginId");
+		%>
 		<!-- content -->
 		<div class= "container">
 			<h1>Board Input Page</h1>
@@ -20,7 +22,11 @@
 					<tr>
 						<th>작성자</th>
 						<td>
-							<input type="text" name="writer" id="writer" placeholder="Writer">
+							<input type="text" name="writer" id="writer" readonly
+							<% if(loginId != null){ %>
+							value ="<%=loginId %>"
+							<%} %>
+							placeholder="Writer">
 						</td>
 					</tr>
 					<tr>

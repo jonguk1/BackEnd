@@ -33,6 +33,7 @@
 				<% }%>
 				<li><a href = "<%=ctx %>/member/join.jsp">회원가입</a></li>
 				<li><a href = "<%=ctx %>/board/input.jsp">게시판 글쓰기</a></li>
-				<li><a href = "<%=ctx %>/board/list.jsp">게시판 글목록</a></li>
+				<li><a href = "<%=ctx %>/board/list2.jsp">게시판 글목록</a></li>
+				<li><a href = "<%=ctx %>/login/mypage.jsp">MyPage</a></li>
 			</ul>
 		</header>

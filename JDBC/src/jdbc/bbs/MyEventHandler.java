@@ -36,38 +36,48 @@ public class MyEventHandler implements ActionListener{
 			showList();
 		}else if(obj == gui.bbsDel) {//게시글 삭제
 			removeList();
-		}else if(obj == gui.bbsFind) {
+		}else if(obj == gui.bbsFind) {//게시글 검색
 			searchList();
 		}
 		
 	}
 	
+	/*
+	 * 게시판 삭제
+	 * 
+	 * */
 	private void removeList() {
-		String no = gui.tfNo.getText();
+		String title = gui.tfTitle.getText();
 		String writer = gui.tfWriter.getText();
 		//2. 유효성 체크
-		if(no == null || no.trim().isEmpty()) {
-			gui.showMsg("글번호를 입력해주세요");
+		if(title == null || title.trim().isEmpty()) {
+			gui.showMsg("제목를 입력해주세요");
 			gui.tfNo.requestFocus();
 			return;
 		}
-		//3. userDao의 deleteMember(id) 호출
 	    try {
-	    	int n = bbsDao.deleteList(no, writer);
+	    	int n = bbsDao.deleteList(title, writer);
 	    	
 	    	//4. 그 결과 메세지 처리	
-	    	String msg = (n>0)?"글 삭제가 완료되었습니다":"삭제 실패- 없는 글번호 입니다" ;
+	    	String msg = (n>0)?"글 삭제가 완료되었습니다":"삭제 실패- 없는 글 입니다" ;
 	    	gui.showMsg(msg);
 	    	
 	    	if(n>0) {
+	    		gui.tabbedPane.setSelectedIndex(3);
 	    		gui.writeListclear();
+				ArrayList<BbsVO> bbsList = bbsDao.selectAll();
+				gui.showList(bbsList);
 	    	}
 	    }catch(SQLException e) {
-	    	gui.showMsg("아이디는 이미 사용중 입니다: "+ e.getMessage());
+	    	gui.showMsg(e.getMessage());
 	    }
 		
 	}
-
+	
+	/*
+	 * 게시판 목록
+	 * 
+	 * */
 	private void showList() {
 		try {
 			//userDao의 selectAll()호출
@@ -79,7 +89,10 @@ public class MyEventHandler implements ActionListener{
 			gui.showMsg(e.getMessage());
 		}
 	}
-
+	/*
+	 * 게시판 검색
+	 * 
+	 * */
 	private void searchList() {
 		String no = gui.tfSearchNo.getText();
 		String title = gui.tfSearchTitle.getText();
@@ -106,7 +119,10 @@ public class MyEventHandler implements ActionListener{
 		}
 		
 	}
-
+	/*
+	 * 게시판 등록
+	 * 
+	 * */
 	private void writeList() {
 		String title = gui.tfTitle.getText();
 		String writer = gui.tfWriter.getText();
@@ -127,13 +143,18 @@ public class MyEventHandler implements ActionListener{
 	    	if(n>0) {
 	    		gui.tabbedPane.setSelectedIndex(3);
 	    		gui.writeListclear();
+				ArrayList<BbsVO> arr = bbsDao.selectAll();
+				gui.showList(arr);
 	    	}	
 		}catch(SQLException e) {
 			gui.showMsg(e.getMessage());
 		}
 		
 	}
-
+	/*
+	 * 로그인
+	 * 
+	 * */
 	private void login() {
 		//id,pw값 받기
 		String loginId = gui.loginId.getText();
@@ -173,7 +194,10 @@ public class MyEventHandler implements ActionListener{
 		}
 		
 	}
-
+	/*
+	 * 회원 정보
+	 * 
+	 * */
 	private void listMember() {
 		try {
 			//userDao의 selectAll()호출
@@ -184,7 +208,10 @@ public class MyEventHandler implements ActionListener{
 			gui.showMsg(e.getMessage());
 		}
 	}
-
+	/*
+	 * 회원 삭제
+	 * 
+	 * */
 	private void removeMember() {
 		//1. 입력한 id값 받기
 		String id = gui.tfId.getText();
@@ -205,6 +232,7 @@ public class MyEventHandler implements ActionListener{
 	    	if(n>0) {
 	    		gui.tabbedPane.setEnabledAt(2, false);
 	    		gui.tabbedPane.setEnabledAt(3, false);
+	    		gui.tabbedPane.setEnabledAt(4, false);
 	    		gui.signUpclear();
 	    		gui.tabbedPane.setSelectedIndex(0);//로그인 탭 선택
 	    	}
@@ -213,7 +241,10 @@ public class MyEventHandler implements ActionListener{
 	    }
 		
 	}
-
+	/*
+	 * 회원 등록
+	 * 
+	 * */
 	private void joinMember(){
 		//1.입력값 받기
 		String id = gui.tfId.getText();
