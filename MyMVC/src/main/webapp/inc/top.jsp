@@ -24,7 +24,7 @@
 				<li><a href = "<%=ctx %>/login/logout.do">로그아웃</a></li>
 				<li><a href = "<%=ctx %>/member/join.do">회원가입</a></li>
 				<li><a href = "<%=ctx %>/board/input.do">게시판 글쓰기</a></li>
-				<li><a href = "<%=ctx %>/board/list2.do">게시판 글목록</a></li>
+				<li><a href = "<%=ctx %>/board/list.do">게시판 글목록</a></li>
 				<li><a href = "<%=ctx %>/login/mypage.do">MyPage</a></li>
 			</ul>
 		</header>
