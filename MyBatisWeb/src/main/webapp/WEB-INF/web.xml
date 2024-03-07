@@ -9,4 +9,14 @@
     <welcome-file>default.jsp</welcome-file>
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
+  <!-- include jsp =========================== -->
+  <jsp-config>
+  	<jsp-property-group>
+  		<url-pattern>*.jsp</url-pattern>
+  		<include-prelude>/inc/top.jsp</include-prelude>
+  		<include-coda>/inc/foot.jsp</include-coda>
+  	</jsp-property-group>
+  </jsp-config>
+  
+  
 </web-app>
