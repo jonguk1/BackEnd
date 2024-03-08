@@ -30,7 +30,10 @@
 						<td>${user.id }</td>
 						<td>${user.tel}</td>
 						<td>${user.indate}</td>
-						<td><a href="#" onclick="goDel('${user.id}')">삭제</a></td>
+						<td>
+						<a href="#" onclick="goDel('${user.id}')">삭제</a>
+						<a href="#" onclick="goEdit('${user.id}')">수정</a>
+						</td>
 					</tr>
 				</c:forEach>
 			</c:otherwise>
@@ -50,9 +53,18 @@
 	<form name="df" method="post" action="memberDelete.do">
 		<input type="hidden" name="id">
 	</form>
-
+	<!-- 수정 관련 form -->
+	<form name="uf" action="memberUpdate.do" method="post">
+		<input type="hidden" name="id">
+	</form>
 </div>
 <script>
+	function goEdit(uid){
+		//alert(uid)
+		uf.id.value=uid;
+		uf.submit();
+	}
+
 	function goDel(uid) {
 		df.id.value = uid;
 		let yn = confirm(uid + "님의 정보를 삭제할까요?");

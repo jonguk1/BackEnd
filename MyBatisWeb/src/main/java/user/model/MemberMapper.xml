@@ -15,6 +15,11 @@
 		java_member(name,id,pw,tel,indate)
 		values(#{name},#{id},#{pw},#{tel:VARCHAR},sysdate)
 	</insert>
+	<!-- 아이디 중복체크 -->
+	<select id="idCheck" resultType="_int" parameterType="string">
+		select count(id) from java_member
+		where id=#{value}
+	</select>
 
 	<!-- 회원목록. select결과를 MemberVO에 자동으로 담아준다(setter메서드 이용) DB 테이블의 컬럼명과 VO객체의 
 		property명이 같아야 자동으로 담아준다 -->
@@ -30,9 +35,30 @@
 		where rn between #{start} and #{end}
 	</select>
 	
-	<delete id="deleteMember" parameterType="Member">
+	<delete id="deleteMember" parameterType="string">
 		delete from java_member
-		where id = #{id}	
+		<where>
+			id=#{value}
+		</where>	
 	</delete>
-
+	
+	<!-- id로 회원정보 가져오기  -->
+	<select id="getMember" resultType="Member" parameterType="string">
+		select * from java_member
+		<where>
+			id=#{value}
+		</where>
+	</select>
+	
+	<!-- 회원정보 수정 -->
+	<update id ="updateMember" parameterType="Member">
+		update java_member
+		<set>
+			name=#{name}, pw=#{pw} ,tel=#{tel:VARCHAR}
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+	
 </mapper>
