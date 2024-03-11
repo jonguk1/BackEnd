@@ -6,4 +6,8 @@
 	<select id ="testCnt" resultType="_int">
 		select count(*) from tab
 	</select>
+	
+	<select id="getTableInfo" resultType="svo">
+		select * from tab
+	</select>
 </mapper>

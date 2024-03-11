@@ -1,10 +1,13 @@
 package common.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import common.domain.SampleVO;
 import common.mapper.SampleMapper;
 
 @Controller
@@ -26,4 +29,16 @@ public class SampleController {
 		
 		return "sample";
 	}
+	
+	@RequestMapping("/tableInfo.do")
+	public String getTableInfo(Model model) {
+		
+		List<SampleVO> arr = sampleMapper.getTableInfo();
+		
+		model.addAttribute("tabList" , arr);
+		
+		return "tabInfo";
+	}
+	
+	
 }
