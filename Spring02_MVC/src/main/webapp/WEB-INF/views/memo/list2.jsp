@@ -43,6 +43,15 @@ ul.memos li:nth-child(4n+3) {
 ul.memos li:nth-child(4n) {
 	width: 20%;
 }
+span.ed{
+	float:right;
+}
+.active{
+	font-weight: bold;
+	color : red;
+}
+
+
 </style>
 <!-- 글쓰기 페이지 포함 -------------- -->
 <br>
@@ -79,9 +88,28 @@ ul.memos li:nth-child(4n) {
 	<div style="clear: both"></div>
 	<br>
 	<div class="page">
-	<c:forEach var="i" begin="1" end="${pageCount}">
-		[<a href="memoList?pageNum=${i}">${i}</a>]
+	<!-- 페이징 블럭 처리 관련------------------ -->
+	<c:if test="${prevBlock>0}">
+		<a href="memoList?pageNum=${prevBlock}">◀</a>
+	</c:if>
+	
+	<c:forEach var="i" begin="${prevBlock+1}" end="${nextBlock-1}">
+		<c:if test="${i<=pageCount}">
+			<c:choose>
+				<c:when test="${param.pageNum eq i}">
+					[<a href="memoList?pageNum=${i}" class='active'>${i}</a>]
+				</c:when>
+				<c:otherwise>
+					[<a href="memoList?pageNum=${i}">${i}</a>]
+				</c:otherwise>
+			</c:choose>
+		</c:if>
 	</c:forEach>
+	
+	<c:if test="${nextBlock<=pageCount}">
+		<a href="memoList?pageNum=${nextBlock}">▶</a>
+	</c:if>
+	<!-- --------------------------------- -->
 		<span class="ed">총게시글수: <c:out value="${totalCount}"/>개</span>
 	</div>
 </div>

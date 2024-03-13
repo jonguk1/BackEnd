@@ -46,15 +46,17 @@
   }
 </style>
 <div class="container">
-<h1>한줄 메모장</h1>
-<form name="mf" action="memo" method="post">
+<h1>한줄 메모장-Edit</h1>
+<form name="mf" action="memoEdit" method="post">
+	<input type="hidden" name="no" value="${vo.no}"/>
+	
 	<ul class="memo">
 		<li>작성자</li>
-		<li><input type="text" name="name" placeholder="Name" required></li>
+		<li><input type="text" name="name" value="${vo.name}" placeholder="Name" required></li>
 		<li>메모내용</li>
-		<li><input type="text" name="msg" placeholder="Msg" required></li>
+		<li><input type="text" name="msg" value="${vo.msg}" placeholder="Msg" required></li>
 		<li></li>
-		<li><button>글쓰기</button></li>
+		<li><button>글수정</button></li>
 	</ul>
 </form>
 </div>
