@@ -11,7 +11,7 @@
   	font-family: sans-serif;
   	margin:1em;
   }	
-  button{
+  button{ 
   	padding:5px;
   	width:100px;
   	border:1px solid #ddd;

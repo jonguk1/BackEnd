@@ -14,8 +14,8 @@
 	<logger name="com.multi.campus">
 		<level value="info" />
 	</logger>
-	<logger name="com.memo.controller">
-		<level value="info" />
+	<logger name="com.shop">
+		<level value="debug" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

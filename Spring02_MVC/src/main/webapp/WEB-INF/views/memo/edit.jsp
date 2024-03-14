@@ -12,7 +12,7 @@
   	margin:1em;
   }	
   button{
-  	padding:5px;
+  	padding:5px; 
   	width:100px;
   	border:1px solid #ddd;
   	border-radius:3px;

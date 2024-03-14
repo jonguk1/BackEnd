@@ -9,7 +9,7 @@ body * {
 	box-sizing: border-box;
 }
 
-#memoList {
+#memoList { 
 	text-align: center;
 	width: 80%;
 	margin: auto;
