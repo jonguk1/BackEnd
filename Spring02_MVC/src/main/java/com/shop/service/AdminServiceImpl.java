@@ -51,14 +51,12 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public ProductVO getProduct(int pnum) {
-		// TODO Auto-generated method stub
-		return null;
+		return productMapper.getProduct(pnum);
 	}
 
 	@Override
 	public int productUpdate(ProductVO prod) {
-		// TODO Auto-generated method stub
-		return 0;
+		return productMapper.productUpdate(prod);
 	}
 
 	@Override

@@ -46,7 +46,9 @@ public class AdminController {
 	@PostMapping("/prodInsert")
 	public String productInsert(Model m, ProductVO item,
 			@RequestParam("pimage") List<MultipartFile> pimage,
+			@RequestParam(value="mode",defaultValue = "insert") String mode,
 			HttpServletRequest req) {
+		log.info("mode: "+mode);
 		log.info("item: " + item);
 		log.info("pimage: " + pimage);
 		//1. 업로드할 디렉토리의 절대경로 얻기
@@ -79,9 +81,14 @@ public class AdminController {
 		}
 		log.info("item2: " + item);
 		
-		int n=adminService.productInsert(item);
+		int n=0;
+		if(mode.equals("insert")) {
+			n=adminService.productInsert(item);//등록 처리
+		}else if(mode.equals("edit")) {
+			n=adminService.productUpdate(item);//수정 처리
+		}
 		
-		String msg = (n>0)?"등록 성공":"등록 실패";
+		String msg = (n>0)?"성공":"실패";
 		String loc = (n>0)?"prodList":"javascript:history.back()";
 		return util.addMsgLoc(m, msg, loc);
 	}
@@ -96,7 +103,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/prodDel")
-	public String productDelete(Model m,@RequestParam("pnum") int pnum) {
+	public String productDelete(Model m,@RequestParam(defaultValue = "0") int pnum) {
 		if(pnum == 0) {
 			return "redirect:prodList";
 		}
@@ -105,6 +112,21 @@ public class AdminController {
 		return "redirect:prodList";
 	}
 	
+	@PostMapping("/prodEditForm")
+	public String prodEditForm(Model m,@RequestParam(defaultValue = "0")  int pnum) {
+		log.info("pnum" + pnum);
+		if(pnum==0) {
+			return "redirect:prodList";
+		}
+		
+		List<CategoryVO> upCgList = adminService.getUpcategory();
+		ProductVO item = adminService.getProduct(pnum);
+		
+		m.addAttribute("item",item);
+		m.addAttribute("upCgList",upCgList);
+		
+		return "admin/prodEdit";
+	}
 	
 	
 	

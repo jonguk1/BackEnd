@@ -8,12 +8,14 @@
 		<typeAlias type="com.memo.model.MemoVO" alias="Memo"/>
 		<typeAlias type="com.shop.domain.CategoryVO" alias="Category"/>
 		<typeAlias type="com.shop.domain.ProductVO" alias="Product"/>
+		<typeAlias type="com.shop.domain.CartVO" alias="Cart"/>
 	</typeAliases>
 	<mappers>
 	    <!-- 매퍼 정의================================ -->	
 		<mapper resource="config/mapper/SampleMapper.xml" />
 		<mapper resource="config/mapper/MemoMapper.xml" />
 		<mapper resource="config/mapper/ProductMapper.xml" />
+		<mapper resource="config/mapper/CartMapper.xml" />
 		<!-- <mapper resource="config/mapper/MemoMapperMySQL.xml" /> -->
 	</mappers>
 </configuration>
