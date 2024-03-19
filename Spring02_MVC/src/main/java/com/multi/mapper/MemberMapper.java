@@ -11,11 +11,10 @@ import com.user.domain.MemberVO;
 public interface MemberMapper {
 	
 	int insertMember(MemberVO vo);
-	boolean idCheck(String userid);
+	int idCheck(String userid);
 	
 	List<MemberVO> selectAll();
 	MemberVO selectByUserid(String userid);
 	
 	MemberVO loginCheck(MemberVO tmpUser) throws NotUserException;
-	int countByUserid(String userid);
 }

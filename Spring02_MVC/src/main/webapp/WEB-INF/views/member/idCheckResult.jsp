@@ -2,13 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
-	.wrap header,footer{
+	.jumbotron,.navbar{
 		display:none;
 	}
 </style>
 <script>
 	function id_check(){	
-		if(!idf.id.value){
+		if(!idf.userid.value){
 			alert('아이디를 입력하세요');
 			idf.id.focus();
 			return false;
@@ -30,13 +30,13 @@
 		<h3 style='color:red'>${msg}</h3>
 		<br>
 		<c:if test="${result eq 'ok' }">
-			<button onclick="setId('${uid}')">아이디 사용하기</button>
+			<button onclick="setId('${uid}')" class="btn btn-outline-success">아이디 사용하기</button>
 		</c:if>
 	</div>
 
 	<form name="idf" action="idCheck" method="post" onsubmit="return id_check()">
 		<label for="id">아이디</label>
-		<input type="text" name="id" id="id" placeholder="ID" autofocus="autofocus" >
-		<button class="btn">확	인</button>
+		<input type="text" name="userid" id="userid" placeholder="ID" autofocus="autofocus" class="form-control">
+		<button class="btn btn-outline-success">확	인</button>
 	</form>
 </div>

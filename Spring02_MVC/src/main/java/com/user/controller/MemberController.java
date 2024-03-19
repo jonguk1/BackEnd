@@ -53,25 +53,28 @@ public class MemberController {
 	}
 	
 	@PostMapping("/idCheck")
-	public String idCheckEnd(Model m, @RequestParam("id") String id) {
-		if(id ==null || id.trim().isBlank()) {
+	public String idCheckEnd(Model m, @RequestParam(defaultValue = "") String userid) {
+		if(userid.trim().isBlank()) {
 			String msg="아이디를 입력하세요";
 			return util.addMsgBack(m, msg);
 		}
 		
-		log.info("id: " + id);
+		boolean isUse = mService.idCheck(userid);
 		
-		boolean isUse = mService.idCheck(id);
-		
-		String msg= (isUse)?id+"는 사용 가능합니다": id+"는 이미 사용중 입니다";
+		String msg= (isUse)?userid+"는 사용 가능합니다": userid+"는 이미 사용중 입니다";
 		String result= (isUse)?"ok":"fail";
 		
 		m.addAttribute("msg",msg);
 		m.addAttribute("result",result);
-		m.addAttribute("uid",id);
+		m.addAttribute("uid",userid);
 		
 		return "member/idCheckResult";
 		
+	}
+	
+	@GetMapping("/user/mypage")
+	public String mypage() {
+		return "member/mypage";
 	}
 	
 	

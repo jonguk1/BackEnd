@@ -2,6 +2,7 @@ package com.user.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.common.exception.NotUserException;
@@ -20,25 +21,25 @@ public class MemberServiceImpl implements MemberService {
 	//private MemberMapper mMapper;//Field Injection
 	private final MemberMapper mMapper;//final field ==> 생성자 주입(@RequiredArgsConstructor)
 	
+	private final BCryptPasswordEncoder passwordEncoder; //==> 생성자 주입
+	
+	//사용자가 입력한 비번에 솔트(랜덤하게 생성)을 덧붙이고 이를 해시하여 암호화된 비밀번호를 만들어준다(암호화)
+	//<=> 복호화(암호화 된 것을 푸는 것)
 	@Override
 	public int insertMember(MemberVO vo) {
-		log.info("mMapper: "+mMapper);
+		log.info("passwordEncoder: "+passwordEncoder);
+		//비밀번호 암호화 처리
+		vo.setPwd(passwordEncoder.encode(vo.getPwd()));
+		log.info("암호화된 비밀번호: " + vo.getPwd());
 		return mMapper.insertMember(vo);
 	}
 
 	@Override
 	public boolean idCheck(String userid) {
-	    int n = mMapper.countByUserid(userid);
-	    
-		return (n==1)? false:true;
+	    int n = mMapper.idCheck(userid);
+		return (n>0)? false:true;
 	}
 	
-	@Override
-	public int countByUserid(String userid) {
-		
-		return mMapper.countByUserid(userid);
-	}
-
 	@Override
 	public List<MemberVO> selectAll() {
 		// TODO Auto-generated method stub
@@ -53,8 +54,19 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberVO loginCheck(MemberVO tmpUser) throws NotUserException {
-		// TODO Auto-generated method stub
-		return null;
+		MemberVO dbUser = this.selectByUserid(tmpUser.getUserid());
+		if(dbUser == null) {
+			//아이디가 없는 경우 => 사용자 정의 예외 발생
+			throw new NotUserException("아이디 또는 비밀번호가 일치하지 않아요");
+		}
+		//비밀번호 일치여부 체크
+		boolean isMatch=passwordEncoder.matches(tmpUser.getPwd(), dbUser.getPwd());
+		log.info("tmpUser.getPwd(): " + tmpUser.getPwd());
+		log.info("dbUser.getPwd(): " + dbUser.getPwd());
+		
+		if(!isMatch) throw new NotUserException("아이디 또는 비밀번호가 일치하지 않아요");
+		
+		return dbUser;//회원이 맞다면 회원정보 반환
 	}
 
 }

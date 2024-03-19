@@ -13,8 +13,6 @@ public interface MemberService {
 	int insertMember(MemberVO vo);
 	boolean idCheck(String userid);
 	
-	int countByUserid(String userid);
-	
 	List<MemberVO> selectAll();
 	MemberVO selectByUserid(String userid);
 	

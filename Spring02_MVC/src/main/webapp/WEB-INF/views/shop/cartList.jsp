@@ -5,7 +5,7 @@
 <c:if test="${cartArr ne null and not empty cartArr}">
 	<c:set var="uid" value="${cartArr[0].userid}" />
 </c:if>
-<h2 class="text-center text-secondary">a [${uid }] 님의 장바구니</h2>
+<h2 class="text-center text-secondary">${loginUser.name} [${loginUser.userid}] 님의 장바구니</h2>
 <br>
 <br>
 <div>

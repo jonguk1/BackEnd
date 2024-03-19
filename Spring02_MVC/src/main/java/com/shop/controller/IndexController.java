@@ -27,10 +27,10 @@ public class IndexController {
 	@RequestMapping("/index")
 	public void showIndex(Model m) {	
 		List<ProductVO> newItems = shopService.selectByPspec("NEW");
-		log.info("NEW상품: " + newItems.size() + "개");
+		//log.info("NEW상품: " + newItems.size() + "개");
 		
 		List<ProductVO> hitItems= shopService.selectByPspec("HIT");
-		log.info("HIT상품: " + hitItems.size() + "개");
+		//log.info("HIT상품: " + hitItems.size() + "개");
 		
 		m.addAttribute("hitItems",hitItems);
 		m.addAttribute("newItems",newItems);
