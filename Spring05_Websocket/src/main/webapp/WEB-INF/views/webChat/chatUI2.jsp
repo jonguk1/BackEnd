@@ -4,7 +4,87 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>::Chatting::</title>
+<title>::Chatting2::</title>
+<style type="text/css">
+    .discussion {
+            list-style: none;
+            background: #ededed;
+            margin: 0;
+            padding: 0 0 50px 0;
+        }
+        
+        .discussion li {
+            padding: 0.5em;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        .discussion .avatar {
+            width: 40px;
+            position: relative;
+        }
+        
+        .discussion .avatar img {
+            display: block;
+            width: 100%;
+        }
+        
+        .other .avatar:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border: 5px solid white;
+            border-left-color: transparent;
+            border-bottom-color: transparent;
+        }
+        
+        .self {
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+        
+        .self .messages {
+            order: 1;
+            border-bottom-right-radius: 0;
+        }
+        
+        .self .avatar {
+            order: 2;
+        }
+        
+        .self .avatar:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border: 5px solid white;
+            border-right-color: transparent;
+            border-top-color: transparent;
+            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .messages {
+            background: white;
+            padding: 10px;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .messages p {
+            font-size: 0.8em;
+            margin: 0 0 0.2em 0;
+        }
+        
+        .messages time {
+            font-size: 0.7em;
+            color: #ccc;
+        }
+</style>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -87,15 +167,51 @@
 	}
 	
 	
-	function showChatMessage(obj){
+	function showChatMessage(obj){//대화내용을 출력하는 함수
+		if(obj.from==nickname){//내가 보낸 메시지라면
+			let str=`
+				<p>
+				<label class='badge badge-success'>\${obj.from}</label>
+				&nbsp;&nbsp;&nbsp;
+				\${obj.text}
+				</p>
+			`;
+			addMessage('self',str,obj.time);
+		}else{//다른 사람이 보낸 메시지라면
+			let str=`
+				<p>
+				<label class='badge badge-danger'>\${obj.from}</label>
+				&nbsp;&nbsp;&nbsp;
+				\${obj.text}
+				</p>
+			`;
+			addMessage('other',str,obj.time);
+		}
+		//$('#taMsg').append(str);
+		
+	}
+	
+	function addMessage(who, msg, time){
+		let img="<img src='resources/me.PNG'>";
+		if(who=='other'){
+			let img="<img src='resources/other.PNG'>";
+		}
 		let str=`
-		<p>
-		<label class='badge badge-success'>\${obj.from}</label>
-		&nbsp;&nbsp;&nbsp;
-		\${obj.text}
-		</p>
-		`;
+			<li class='\${who}'>
+				<div class='avatar'>
+				\${img}
+				</div>
+				<div class="messages">
+					<p>\${msg}</p>
+					<time>\${time}</time>
+				</div>
+			</li>
+		
+		`
 		$('#taMsg').append(str);
+		//메시지가 쌓이면 스크롤바가 따라다니도록
+		document.getElementById('taMsg').scrollTop=document.getElementById('taMsg').scrollHeight;
+		//$('#taMsg').scrollTop($('#taMsg')[0].scrollHeight);
 	}
 	
 	
@@ -114,9 +230,9 @@
 	function chat_disconnect(){
 		if(stompClient != null){
 			sendMessage(nickname,"all",nickname+"님이 퇴장하였습니다");
-			$('#status').html("채팅을 연결후 사용하세요....");
+			$('#status').html("채팅을 연결후 사용하세요");
 			stompClient.disconnect();
-			alert('연결 끊음');
+			//alert('연결 끊음');
 			console.log('Disconnect..');
 			stompClient=null;
 		}
@@ -130,7 +246,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h1>Multishop Chatting</h1>
+				<h1>Multishop Chatting -Topic (1:N)</h1>
 				<div class="mb-3 mt-3">
 					<label for="nickname" class="form-label">닉네임 : </label> <input
 						type="text" class="form-control" id="nickname"
@@ -158,7 +274,7 @@
 					placeholder="메시지를 입력하세요." name="inputMsg">
 			</div>
 			<!-- 대화 내용 -->
-			<div id="taMsg"></div>
+			<div id="taMsg" class="discussion"></div>
 		</div>
 	</div>
 
