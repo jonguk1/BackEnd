@@ -18,7 +18,7 @@ public class MemberVO {
 	private String addr1;
 	private String addr2;
 	private Date indate;
-	private int milage;
+	private int mileage;
 	private int mstate;//0:일반회원, -1:정지회원, -2:탈퇴회원
 	private String mstateStr;
 	

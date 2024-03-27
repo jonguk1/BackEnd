@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!--[1] context, mybatis-spring 네임스페이스 추가함 -->
@@ -40,6 +42,12 @@
 		<property name="password" value="${db.password}"></property>
 	</bean>
 	
+	<!-- Transaction을 위한 TransactionManager 등록 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource-hikari"/>
+	</bean>
+	<!-- <tx:annotation-driven/> ==> servlet-context.xml에 등록해야함  -->
+	
 	<!--[4] SqlSessionFactroyBean 등록 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource-hikari"/>
@@ -53,5 +61,9 @@
 	
 	<!--[6] mybatis-spring:scan 설정 -->
 	<mybatis-spring:scan base-package="com.multi.mapper"/>
+	
+	<!-- aspectj-autoproxy설정 -->
+	<aop:aspectj-autoproxy/>
+	<bean id="loggingAspect" class="com.common.aspect.LoggingAspect"/>
 </beans>
 
