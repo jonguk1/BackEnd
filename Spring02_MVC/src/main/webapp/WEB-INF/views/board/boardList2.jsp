@@ -83,31 +83,8 @@
 		</c:choose>
 		<tr>
 			<td colspan="3">
-				<ul class="pagination justify-content-center">
-					<%-- <c:forEach var="i" begin="1" end="${page.pageCount}"> --%>
-					<c:if test="${page.prevBlock >0}">
-						<li class="page-item">
-							<a class="page-link" href="list?pageNum=${page.prevBlock}">Prev</a>
-						</li>
-					</c:if>
-					
-					<c:forEach var="i" begin="${page.prevBlock+1}" end="${page.nextBlock-1}">
-						<c:if test="${i <= page.pageCount}">
-							<li class="page-item  <c:if test="${i eq page.pageNum}">active</c:if>">
-								<a class="page-link"
-								  href="list?pageNum=${i}">${i}</a>
-							</li>
-						</c:if>
-					</c:forEach>
-					
-					<c:if test="${page.nextBlock <= page.pageCount}">
-						<li class="page-item">
-							<a class="page-link" href="list?pageNum=${page.nextBlock}">Next</a>
-						</li>
-					</c:if>
-				</ul>
-				
-				
+				<!-- 페이지 네비게이션 들어갈 자리 -->
+				<c:out value="${pageNavi}" escapeXml="false"/>
 			</td>
 			<td colspan="2">
 				총게시글 수: <span style="color:red;font-weight:bold"><c:out value="${totalCount}"/></span> 개
