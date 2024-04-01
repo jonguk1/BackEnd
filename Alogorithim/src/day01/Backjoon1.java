@@ -24,15 +24,19 @@ public class Backjoon1 {
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		
 		System.out.println("수의 개수를 입력하세요");
 		int a= sc.nextInt();
+		
 		System.out.println("합을 구해야하는 개수를 입력하세요");
 		int b= sc.nextInt();
+		
 		System.out.println("배열을 입력하세요");
 		int[] arr = new int[a]; 
 		for(int i=0;i<arr.length;i++) {
 			arr[i] = sc.nextInt();
 		}
+		
 		System.out.println("합을 구해야하는 범위를 입력하세요");
 		int[] range= new int[b*2];
 		for(int j =0; j<range.length;j++) {
@@ -40,7 +44,6 @@ public class Backjoon1 {
 		}
 		
 		Backjoon1 bj = new Backjoon1();
-		
 		int[] sumArr = bj.sumArr(b, range, arr);
 
 		for(int i=0;i<sumArr.length;i++) {
