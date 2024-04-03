@@ -5,15 +5,15 @@ import java.util.Arrays;
 public class TestClass {
 
 	public static void main(String[] args) {
-		//Solution sl = new Solution();
-		//int[] array= {1, 5, 2, 6, 3, 7, 4};
-		//int[][] commands = {{2, 5, 3}, {4, 4, 1}, {1, 7, 3}};
+		Solution sl = new Solution();
+		int[] array= {1, 5, 2, 6, 3, 7, 4};
+		int[][] commands = {{2, 5, 3}, {4, 4, 1}, {1, 7, 3}};
 		
-		//int[] result=sl.solution(array, commands);
-		//System.out.println(Arrays.toString(result));
+		int[] result=sl.solution(array, commands);
+		System.out.println(Arrays.toString(result));
 		
-		Solution2 s2 = new Solution2();
-		System.out.println(s2.solution("hello"));
+		//Solution2 s2 = new Solution2();
+		//System.out.println(s2.solution("hello"));
 
 	}
 }
