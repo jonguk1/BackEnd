@@ -1,4 +1,7 @@
 package day03;
+
+import java.util.Comparator;
+
 //제너릭 링크드리스트
 /*head --->[A:next]--->[B:next]--->[C:next]-->[D:next]-->null
 * 
@@ -71,5 +74,78 @@ public class MyLinkedList<T> {
 		}
 		
 	}
+	
+	//특정 노드를 삭제하는 메서드
+	private void remove(Node<T> p) {
+		if(head==null) return;
+		if(p==head) {
+			removeFirst();
+		}else {
+			Node<T> ptr=head;
+			while(ptr.next != p) {
+				ptr=ptr.next;
+				if(ptr.next==null) return;//꼬리 노드까지 이동했는데 못찾았따면 리턴
+			}
+			ptr.next=p.next;
+		}
+	}
+	//선택한 노드를 삭제하는 메서드
+	public void removeCurrentNode() {
+		remove(currentN);
+	}
+	//전체 노드를 삭제하는 메서드
+	public void clear() {
+		while(head!=null) {
+			removeFirst();
+		}
+		currentN=null;
+	}
+	
+	//선택한 노드를 출력하는 메서드
+	public void printCurrentNode() {
+		System.out.println("----------------");
+		if(currentN==null) {
+			System.out.println("선택한 노드가 없습니다");
+		}else {
+			System.out.println("선택한 노드 ->" + currentN.data);
+		}
+	}
+	
+	
+	//전체 노드를 출력하는 메서드
+	public void printAllNode() {
+		System.out.println("****************");
+		Node<T> ptr= head;
+		while(ptr!=null && ptr.next!=null) {
+			System.out.print(ptr.data+"->");//데이터값 출력후
+			ptr=ptr.next;
+		}
+		
+		if(ptr!=null) {
+			System.out.println(ptr.data);
+		}
+	}
+	
+	//선택한 노드를 한칸 뒤로 이동시키는 메서드
+	public boolean next() {
+		if(currentN==null||currentN.next==null) {
+			return false;
+		}
+		currentN=currentN.next;
+		return true;
+	}
+	
+	public T search(T obj,Comparator<T> comparator) {
+		Node<T> ptr=head;
+		while(ptr!=null) {
+			if(comparator.compare(obj, ptr.data)==0) {
+				currentN=ptr;
+				return ptr.data;
+			}
+			ptr=ptr.next;
+		}
+		return null;
+	}
+	
 	
 }
