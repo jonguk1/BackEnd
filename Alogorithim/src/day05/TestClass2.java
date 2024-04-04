@@ -1,6 +1,7 @@
 package day05;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 //두 배열의 공통원소 추출
@@ -33,6 +34,8 @@ public class TestClass2 {
 			}
 		}
 
+		Collections.sort(resultList);
+		
 		for (int i = 0; i < resultList.size(); i++) {
 			System.out.print(resultList.get(i) + " ");
 		}
