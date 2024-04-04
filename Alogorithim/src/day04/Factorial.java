@@ -12,21 +12,23 @@ n! : (n-1)!xn
 여기서 1!=1 그리고 n!=nx(n-1)! 라는 팩토리얼 성질을 이용해서 프로그램을 만들어보자
  * */
 public class Factorial {
-
+	
 	public static int factorial(int num) {
-		//종료 조건
+		//종료조건
+		if(num<1) return 1;
+		String sign=(num==1)?"=":"x";
+		System.out.print(num+sign);
+		//재귀단계
+		return factorial(num-1)*num;
 		
-		//재귀 단계
 	}
-	
-	
+
 	public static void main(String[] args) {
-		Scanner sc= new Scanner(System.in);
+		Scanner sc=new Scanner(System.in);
 		System.out.println("팩토리얼 연산을 수행합니다. 정수를 입력하세요: ");
-		int n =sc.nextInt();
+		int n=sc.nextInt();
 		int result=factorial(n);
 		System.out.println(result);
-
 	}
 
-}
+}//////////////////////////////
