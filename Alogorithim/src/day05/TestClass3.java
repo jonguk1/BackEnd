@@ -22,6 +22,8 @@ public class TestClass3 {
 		int sumDiagonal2 = 0;
 
 		for (int i = 0; i < arr.length; i++) {
+			sumWidth=0;
+			sumHeight=0;
 			for (int j = 0; j < arr.length; j++) {
 				int data = sc.nextInt();
 				arr[i][j] = data;
@@ -32,15 +34,15 @@ public class TestClass3 {
 					sumDiagonal2 += arr[arr.length - i - 1][arr.length - j - 1];// 오른쪽부터 왼쪽 대각선 더하기
 				}
 			}
+			sumList.add(sumWidth);
+			sumList.add(sumHeight);
 		}
-		sumList.add(sumWidth);
-		sumList.add(sumHeight);
 		sumList.add(sumDiagonal1);
 		sumList.add(sumDiagonal2);
 
 		Collections.sort(sumList);
-		System.out.println(sumList.toString());
-		System.out.println(sumList.get(3));
+		System.out.println(sumList.size());
+		System.out.println(sumList.get(sumList.size()-1));
 
 	}
 
